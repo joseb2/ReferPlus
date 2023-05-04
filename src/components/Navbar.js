@@ -3,40 +3,15 @@ import React from 'react';
 
 export function Navbar() { 
     return ( 
-        <div id = "container">
-            <div id = "navbar">
-                <div id = "title-navbar">
-                    <h1>Refer+</h1>
+        <div id="container" className="bg-white">
+            <div id="navbar" className="h-16 bg-gray-800 text-white flex justify-between items-center px-4">
+                <div id="title-navbar" className="flex items-center border-4">
+                    <h1 className="text-lg font-bold">Refer+</h1>
                 </div>
             </div>  
-            <div id = "banner">
-                <img id = "banner-image" href = " " alt = "placeholder"></img>
-
+            <div id="banner" className="h-64 bg-orange-300 flex justify-center items-center">
+                <img id="banner-image" href=" " alt="placeholder" className="max-h-full max-w-full"/>
             </div> 
-            <div id = "api-div"> 
-                <div id = "inner-api-div">
-                    <div className= "adjusted-api-div">
-                        <div className = "example-api-div"> {/*  */}
-                            <span className="example-api">
-                                <button>Sample Button</button>
-                            </span>
-                        </div>
-                    </div> {/* end of adjusted-api-div */}
-                    <div className= "adjusted-api-div">
-                        <div className = "example-api-div"> {/*  */}
-                            <span className="example-api">
-                                <button>Sample Button</button>
-                            </span>
-                        </div>
-                    </div> {/* end of adjusted-api-div */}
-                </div>
-
-            </div>
-            <div id = "main-content">
-                <div className= "reviews">
-                    <span> Review </span>
-                </div>
-            </div>
         </div> 
-    )
-}
+    )}
+           
