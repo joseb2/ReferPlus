@@ -1,6 +1,14 @@
 import React from 'react';
-export function SignIn() {
-  return (
+export function SignIn() {  
+
+    function handleAmazon(e) {
+      e.preventDefault(); 
+      
+    }
+
+  
+  return ( 
+  
     <div id="linkDiv" class="bg-white rounded-lg border border-solid border-gray-400 w-[350px] absolute top-[10rem] right-[70px] p-4 min-h-[350px] !important">
       <div class="bg-black w-full h-full">
         <div id = "linkDivBox" class="flex flex-col font-sans items-start space-y-1 bg-white w-full h-full p-4">
@@ -9,6 +17,7 @@ export function SignIn() {
             <span class = "flex items-center justify-center text-14 ">Continue with Facebook</span>
           </a>
           <a id = "button-amazon" href=" " class="flex items-center justify-between text-sm mb-0.875 w-full h-14 font-medium leading-none text-black bg-amazon hover:bg-gray-200 border border-gray-300 py-2 px-4 rounded">
+            
             <img src="/assets/amazon.png" alt="Amazon Icon" class = "w-8 h-8 align-center " />
             <span class = "flex items-center justify-center text-14">Continue with Amazon</span>
           </a> 
