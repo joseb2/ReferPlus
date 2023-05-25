@@ -6,7 +6,7 @@ module.exports = {
       colors: {
         'facebook': '#3b5998',
         'email': '#382110',
-        'amazon' : '#f5d47a;'
+        'amazon': '#f5d47a'
       }, 
 
       fontFamily: { 
