@@ -4,7 +4,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 
 
 //SignIn.js
-export function SignIn() {  
+export default function SignIn() {  
   return ( 
   
     <div id="linkDiv" class="bg-white rounded-lg .input-with-margin border border-solid border-gray-400 w-[350px] absolute top-[10rem] right-[70px] p-4 min-h-[350px] !important">

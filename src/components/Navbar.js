@@ -1,7 +1,7 @@
 import React from 'react'; 
 
 
-export function Navbar() { 
+export default function Navbar() { 
     return ( 
         <div id="container" className="bg-white">
             <div id="navbar" className="h-16 bg-gray-800 text-white flex justify-between items-center px-4">
