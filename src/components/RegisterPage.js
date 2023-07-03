@@ -55,33 +55,7 @@ function RegisterPage() {
   const maxOpenPrice = getMaxOpenPrice();
 
 
-  const CustomDot = ({ cx, cy, stroke }) => {
-    const [isHovered, setIsHovered] = useState(false);
-  
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
-  
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-    };
-  
-    const dotColor = isHovered ? 'red' : stroke;
-  
-    return (
-      <circle
-        cx={cx}
-        cy={cy}
-        r={4}
-        stroke={dotColor}
-        fill={dotColor}
-        fillOpacity={-2}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      />
-    );
-  };
-  
+
 
   const CustomXAxisTick = ({ x, y, payload }) => {
     const [isHovered, setIsHovered] = useState(false);
@@ -94,7 +68,7 @@ function RegisterPage() {
       setIsHovered(false);
     };
 
-    const tickColor = isHovered ? 'red' : '#666';
+    const tickColor = isHovered ? 'red' : 'blue';
 
     return (
       <g transform={`translate(${x},${y})`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -115,12 +89,12 @@ function RegisterPage() {
   };
 
   return (
-    <>
-      <h1 className="mb-8">Register Page</h1>
+    <div className="bg-gray-900">
+      <h1 className="mb-8 text-white">Register Page</h1>
 
       {chartData.length > 0 && (
         <div style={{ position: 'relative' }}> 
-          <LineChart width={500} height={300} data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <LineChart width={1000} height={500} data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <XAxis dataKey="date" tick={<CustomXAxisTick />} />
             <YAxis domain={[minOpenPrice, maxOpenPrice]} />
             <Tooltip content={<TooltipContent />} />
@@ -132,12 +106,12 @@ function RegisterPage() {
               activeDot={{ stroke: 'red', strokeWidth: 2, r: 6 }}
               
             />
-            <Brush dataKey="date" height={30} stroke="#8884d8"/>
+            <Brush dataKey="date" height={30} width={50} stroke="#8884d8"/>
           </LineChart>
 
           {/*// Render the custom tooltip outside the chart, to the right*/}
           {activePayload && (
-            <div style={{ position: 'absolute', left: 525, top: '50%', transform: 'translateY(-50%)' }}>
+            <div className = "text-white" style={{ position: 'absolute', left: -30, top: '50%', transform: 'translateY(-50%)' }}>
               <CustomTooltip active={true} payload={activePayload} />
             </div>
           )}
@@ -145,7 +119,7 @@ function RegisterPage() {
       )}
 
       <Link to="/">Go back to Home</Link>
-    </>
+    </div>
   );
 }
 
