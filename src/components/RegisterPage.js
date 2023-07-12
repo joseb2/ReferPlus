@@ -12,13 +12,14 @@ function CustomTooltip({ active, payload }) {
       </div>
     );
   }
+
   return null;
 }
 
 function RegisterPage() {
   const [chartData, setChartData] = useState([]);
   const [ticker, setTicker] = useState("IBM");
-  const [inputValue, setInputValue] = useState(ticker); 
+  const [inputValue, setInputValue] = useState(ticker);
 
   const fetchData = () => {
     fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${ticker}&apikey=API_KEY`)
@@ -59,37 +60,44 @@ function RegisterPage() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-900">
-      {/* Left Sidebar */}
-      <aside className="w-64 h-3/4 screen:h-full shadow-lg ml-10 mt-20 rounded-lg bg-gray-800">
-        <div className="flex flex-col sidebar mt-5">
-          <Link to="#" className="flex items-center py-4 px-6 text-white justify-center hover:bg-gray-900">
-            <span className="material-icons-sharp mr-2">dashboard</span>
-            <h3 className="text-center">Dashboard</h3>
-          </Link>
+    <div className="min-h-screen bg-gray-900 grid grid-cols-5 gap-4 p-4">
+      <div className="col-span-1 bg-gray-800 flex flex-col">
+        {/* Ticker Symbol */}
+        <div className="bg-gray-800 h-[3rem] w-[9rem] mx-auto mt-2 mb-5 flex items-center justify-center rounded-lg">
+          <span className="text-white text-4xl">{ticker}</span>
         </div>
-      </aside>
-      {/* Main Content */}
-      <div className="flex-grow ml-8">
+        {/* Left Sidebar */}
+        <aside className="shadow-lg mt-2 mb-5 rounded-lg flex-grow"> 
+          <div className="flex flex-col sidebar mt-5">
+            <Link to="#" className="flex items-center py-4 px-6 text-white justify-center hover:bg-gray-900">
+              <span className="material-icons-sharp mr-2">dashboard</span>
+              <h3 className="text-center">Dashboard</h3>
+            </Link>
+          </div>
+        </aside>
+      </div>
+  
+      <div className="col-span-3 bg-gray-800 flex flex-col items-center justify-center">
         {/* Ticker Symbol Search */}
-        <div className="mt-5 mb-5 bg">
+        <div className="mt-5 mb-5">
           <input
             type="text"
             placeholder="Search ticker..."
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
-            className="rounded p-2 bg-gray-800 text-white"
+            className="rounded p-2 text-black"
           />
           <button onClick={() => setTicker(inputValue)} className="ml-2 rounded text-white p-2">Search</button>
         </div>
-        {/* Ticker Symbol */}
-        <div className="bg-gray-800 h-[3rem] w-[9rem] mt-2 mb-5 flex items-center justify-center rounded-lg">
-          <span className="text-white text-4xl">{ticker}</span>
-        </div>
         {/* Chart */}
-        <div className="relative w-[60] h-[40rem]  mr-8 bg-gray-800 rounded-lg pr-20 pt-7">
+        <div className="relative w-full h-[40rem] mr-8 rounded-lg pr-20 pt-7">
           {chartData.length > 0 && (
-            <LineChart width={1200} height={500} data={chartData} margin={{ top: 20, right: 100, left: 50, bottom: 0 }}>
+            <LineChart
+              width={700}
+              height={500}
+              data={chartData}
+              margin={{ top: 20, right: 100, left: 50, bottom: 0 }}
+            >
               <XAxis dataKey="date" tick={<CustomXAxisTick />} />
               <YAxis tick={{ fill: 'white' }} />
               <Tooltip content={<CustomTooltip />} />
@@ -101,17 +109,20 @@ function RegisterPage() {
           Go back to Home
         </Link>
       </div>
-      {/* Right Sidebar */}
-      <aside className="w-64 h-3/4 screen:h-full shadow-lg mr-11 mt-[4.6rem] rounded-lg bg-gray-800">
-        <div className="flex flex-col sidebar mt-5">
-          <Link to="#" className="flex items-center py-4 px-6 text-white justify-center hover:bg-gray-900">
-            <span className="material-icons-sharp mr-2">dashboard</span>
-            <h3 className="text-center">Right Sidebar</h3>
-          </Link>
-        </div>
-      </aside>
+  
+      <div className="col-span-1 bg-gray-800 flex flex-col">
+        {/* Right Sidebar */}
+        <aside className="shadow-lg mt-2 mb-5 rounded-lg flex-grow">
+          <div className="flex flex-col sidebar mt-5">
+            <Link to="#" className="flex items-center py-4 px-6 text-white justify-center hover:bg-gray-900">
+              <span className="material-icons-sharp mr-2">dashboard</span>
+              <h3 className="text-center">Right Sidebar</h3>
+            </Link>
+          </div>
+        </aside>
+      </div>
     </div>
   );
-}
+}  
 
 export default RegisterPage;
