@@ -1,52 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
-import { format, parseISO } from 'date-fns';
-
-function CustomTooltip({ active, payload }) {
-  if (active && payload && payload.length) {
-    return (
-      <div className="custom-tooltip">
-        <p className="label">{`Date : ${payload[0].payload.date}`}</p>
-        <p className="desc">{`Open price : ${payload[0].payload.openPrice}`}</p>
-      </div>
-    );
-  }
-
-  return null;
-}
+import { useResizeDetector } from 'react-resize-detector';
+import { ResponsiveContainer } from 'recharts';
+import LeftSidebar from './LeftSidebar';
+import RightSidebar from './RightSidebar';
+import CustomTooltip from './CustomTooltip';
+import useChartData from './useChartData';
 
 function RegisterPage() {
-  const [chartData, setChartData] = useState([]);
+  const { width } = useResizeDetector();
   const [ticker, setTicker] = useState("IBM");
   const [inputValue, setInputValue] = useState(ticker);
-
-  const fetchData = () => {
-    fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${ticker}&apikey=API_KEY`)
-      .then(response => response.json())
-      .then(data => {
-        const weeklyData = data['Weekly Time Series'];
-        const dates = Object.keys(weeklyData);
-        let monthlyData = {};
-        dates.forEach(date => {
-          const parsedDate = parseISO(date);
-          const formattedDate = format(parsedDate, 'yyyy-MM');
-          const openPrice = parseFloat(weeklyData[date]['1. open']);
-          if (monthlyData[formattedDate]) {
-            monthlyData[formattedDate].openPrice = (monthlyData[formattedDate].openPrice + openPrice) / 2;
-          } else {
-            monthlyData[formattedDate] = { date: formattedDate, openPrice: openPrice };
-          }
-        });
-        const formattedDatesAndPrices = Object.values(monthlyData);
-        setChartData(formattedDatesAndPrices);
-      })
-      .catch(error => console.error('Error:', error));
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [ticker]);
+  const [tooltipContent, setTooltipContent] = useState(null); // Store tooltip content
+  const ref = useRef(null);
+  const chartData = useChartData(ticker);
 
   const CustomXAxisTick = ({ x, y, payload }) => {
     const year = payload.value.substring(0, 4);
@@ -61,68 +29,50 @@ function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 grid grid-cols-5 gap-4 p-4">
-      <div className="col-span-1 bg-gray-800 flex flex-col">
-        {/* Ticker Symbol */}
-        <div className="bg-gray-800 h-[3rem] w-[9rem] mx-auto mt-2 mb-5 flex items-center justify-center rounded-lg">
-          <span className="text-white text-4xl">{ticker}</span>
-        </div>
-        {/* Left Sidebar */}
-        <aside className="shadow-lg mt-2 mb-5 rounded-lg flex-grow"> 
-          <div className="flex flex-col sidebar mt-5">
-            <Link to="#" className="flex items-center py-4 px-6 text-white justify-center hover:bg-gray-900">
-              <span className="material-icons-sharp mr-2">dashboard</span>
-              <h3 className="text-center">Dashboard</h3>
-            </Link>
-          </div>
-        </aside>
-      </div>
-  
-      <div className="col-span-3 bg-gray-800 flex flex-col items-center justify-center">
+      <LeftSidebar ticker={ticker} />
+
+      <div className="col-span-3 bg-gray-800 flex flex-col items-center justify-start rounded-lg">
         {/* Ticker Symbol Search */}
-        <div className="mt-5 mb-5">
+        <div className="mt-5 mb-5 w-full px-8">
           <input
             type="text"
             placeholder="Search ticker..."
             value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-            className="rounded p-2 text-black"
+            onChange={(e) => setInputValue(e.target.value)}
+            className="rounded p-2 text-black w-full"
           />
-          <button onClick={() => setTicker(inputValue)} className="ml-2 rounded text-white p-2">Search</button>
+          <button
+            onClick={() => setTicker(inputValue)}
+            className="ml-2 rounded text-white p-2"
+          >
+            Search
+          </button>
         </div>
         {/* Chart */}
-        <div className="relative w-full h-[40rem] mr-8 rounded-lg pr-20 pt-7">
+        <div className="w-full h-[40rem] rounded-lg p-8" ref={ref}>
           {chartData.length > 0 && (
-            <LineChart
-              width={700}
-              height={500}
-              data={chartData}
-              margin={{ top: 20, right: 100, left: 50, bottom: 0 }}
-            >
-              <XAxis dataKey="date" tick={<CustomXAxisTick />} />
-              <YAxis tick={{ fill: 'white' }} />
-              <Tooltip content={<CustomTooltip />} />
-              <Line type="monotone" dataKey="openPrice" stroke="#8884d8" dot={false} />
-            </LineChart>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={chartData}
+                margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+              >
+                <XAxis dataKey="date" tick={<CustomXAxisTick />} />
+                <YAxis tick={{ fill: "white" }} />
+                <Tooltip content={<CustomTooltip setTooltipContent={setTooltipContent} />} />
+                <Line type="monotone" dataKey="openPrice" stroke="#8884d8" dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
           )}
         </div>
         <Link to="/" className="text-white">
           Go back to Home
         </Link>
       </div>
-  
-      <div className="col-span-1 bg-gray-800 flex flex-col">
-        {/* Right Sidebar */}
-        <aside className="shadow-lg mt-2 mb-5 rounded-lg flex-grow">
-          <div className="flex flex-col sidebar mt-5">
-            <Link to="#" className="flex items-center py-4 px-6 text-white justify-center hover:bg-gray-900">
-              <span className="material-icons-sharp mr-2">dashboard</span>
-              <h3 className="text-center">Right Sidebar</h3>
-            </Link>
-          </div>
-        </aside>
-      </div>
+
+      <RightSidebar tooltipContent={tooltipContent} />
+
     </div>
   );
-}  
+}
 
 export default RegisterPage;
