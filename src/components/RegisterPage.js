@@ -89,6 +89,9 @@ function RegisterPage() {
       </div>
     </div>
   );
-}
+} 
+
+{/*change */}
+
 
 export default RegisterPage;

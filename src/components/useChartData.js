@@ -38,4 +38,6 @@ const useChartData = (ticker) => {
   return chartData;
 }
 
+{/*change */}
+
 export default useChartData;
